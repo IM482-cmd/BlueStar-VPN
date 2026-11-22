@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#030817"><meta name="description" content="BlueStar VPN app prototype">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icons/icon-192.png">
+<title>BlueStar</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#030817;color:#f3f7ff;font-family:system-ui,-apple-system,Roboto,sans-serif}
+.app{max-width:480px;margin:auto;min-height:100dvh;padding:calc(16px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 28%,#092a59 0,#030817 58%)}
+header{display:flex;align-items:center;justify-content:space-between}.brand{font-weight:800;font-size:21px}.star{color:#36baff;text-shadow:0 0 18px #0b7cff;font-size:25px}.menu{border:1px solid #21365e;background:#0a1730;color:#9ddcff;border-radius:12px;padding:9px 13px}
+.hero{text-align:center;padding-top:30px}.logo{font-size:78px;line-height:1;color:#2aa9ff;text-shadow:0 0 30px #0b7cff}.title{font-size:38px;font-weight:850;letter-spacing:.3px;margin:4px 0}.title span{color:#22b5ff}.tag{color:#8ea7ce;font-size:13px;letter-spacing:.8px}
+.connect-area{display:flex;justify-content:center;padding:32px 0 23px}.connect{width:205px;height:205px;border-radius:50%;border:2px solid #1386ff;background:radial-gradient(circle,#0b2146,#061127 70%);box-shadow:0 0 0 12px #071b38,0 0 35px #087cff55;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:.25s}.connect:active{transform:scale(.98)}.power{font-size:54px;line-height:1}.connect-label{font-size:19px;font-weight:700;margin-top:9px}.connected{border-color:#3af0b5;box-shadow:0 0 0 12px #082c31,0 0 45px #00f0a055}
+.card{border:1px solid #1b2b52;background:linear-gradient(135deg,#0b1730,#071126);border-radius:19px;padding:17px;margin:9px 0}.row{display:flex;align-items:center;gap:14px}.icon{width:40px;text-align:center;color:#32b7ff;font-size:25px}.info{flex:1}.small{font-size:13px;color:#8fa6ce}.value{font-size:18px;font-weight:700;margin-top:2px}select{width:100%;margin-top:13px;padding:13px;background:#071126;border:1px solid #22365e;border-radius:13px;color:#fff;font-size:16px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);text-align:center}.feat{font-size:13px;color:#8fa6ce}.feat i{display:block;font-style:normal;font-size:25px;margin-bottom:5px}
+.notice{text-align:center;font-size:12px;color:#8197bb;padding:12px 2px}.footer{margin-top:auto;text-align:center;color:#6094d2;letter-spacing:2px;font-size:11px;padding-top:20px}
+.settings{display:none}.settings.show{display:block}.settings button{display:block;width:100%;margin-top:10px;padding:12px;border:1px solid #29446d;border-radius:12px;background:#12284c;color:white}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#12284c;border:1px solid #2b64a8;border-radius:13px;padding:12px 16px;max-width:90%;display:none;text-align:center}
+</style></head>
+<body><main class="app">
+<header><div class="brand"><span class="star">✦</span> Blue<span style="color:#32baff">Star</span></div><button class="menu" id="menu">☰</button></header>
+<section class="hero"><div class="logo">✦</div><div class="title">Blue<span>Star</span></div><div class="tag">CONNECT • STAY SAFE • BE FREE</div></section>
+<div class="connect-area"><button class="connect" id="connect"><span class="power">⏻</span><span class="connect-label">Connect</span></button></div>
+<section class="card"><div class="row"><div class="icon">◇</div><div class="info"><div class="small">Статус</div><div class="value" id="status">Отключено</div></div><div style="color:#8bbaff;font-size:24px">›</div></div></section>
+<section class="card"><div class="row"><div class="icon">◎</div><div class="info"><div class="small">Сервер</div><div class="value" id="serverName">Автоматический</div></div></div><select id="server"><option>Автоматический</option><option>🇺🇸 United States</option><option>🇳🇱 Netherlands</option><option>🇩🇪 Germany</option><option>🇫🇷 France</option><option>🇸🇬 Singapore</option></select></section>
+<section class="card features"><div class="feat"><i>⚡</i>Быстрый</div><div class="feat"><i>🔐</i>Шифрование*</div><div class="feat"><i>🌍</i>Серверы</div></section>
+<section class="card settings" id="settings"><strong>Настройки</strong><p class="small">BlueStar — мобильный веб-прототип.</p><button id="about">О приложении</button><button id="close">Закрыть</button></section>
+<div class="notice">*Реальное VPN-подключение пока не подключено.</div><footer class="footer">BLUESTAR • YOUR CONNECTION</footer></main><div class="toast" id="toast"></div>
+<script>
+let active=false;const b=document.querySelector('#connect'),s=document.querySelector('#status'),toast=document.querySelector('#toast');
+function msg(t){toast.textContent=t;toast.style.display='block';setTimeout(()=>toast.style.display='none',3000)}
+b.onclick=()=>{active=!active;b.classList.toggle('connected',active);b.querySelector('.connect-label').textContent=active?'Disconnect':'Connect';s.textContent=active?'Демо: подключено':'Отключено';msg(active?'Демо включено. Туннель VPN не создан.':'Демо отключено.')}
+document.querySelector('#server').onchange=e=>document.querySelector('#serverName').textContent=e.target.value;
+document.querySelector('#menu').onclick=()=>document.querySelector('#settings').classList.toggle('show');
+document.querySelector('#close').onclick=()=>document.querySelector('#settings').classList.remove('show');
+document.querySelector('#about').onclick=()=>msg('BlueStar — прототип приложения.');
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></body></html>
